@@ -155,3 +155,56 @@ ON i.inventory_id = r.inventory_id
 GROUP BY f.title;
 
 -- 7f
+SELECT st.store_id, SUM(p.amount) AS "Revenue (by dollar)"
+FROM payment p
+JOIN staff sf
+ON p.staff_id = sf.staff_id
+JOIN store st
+ON sf.store_id = st.store_id
+GROUP BY st.store_id;
+
+-- 7g
+SELECT s.store_id, c.city, ct.country
+FROM store s
+JOIN address a
+ON s.address_id = a.address_id
+JOIN city c
+ON a.city_id = c.city_id
+JOIN country ct
+ON c.country_id = ct.country_id;
+
+-- 7h
+SELECT c.name, SUM(p.amount) AS "Revenue"
+FROM payment p
+JOIN rental r
+ON p.rental_id = r.rental_id
+JOIN inventory i
+ON r.inventory_id = i.inventory_id
+JOIN film_category fc
+ON i.film_id = fc.film_id
+JOIN category c
+ON fc.category_id = c.category_id
+GROUP BY c.name
+ORDER BY Revenue DESC LIMIT 5;
+
+
+-- 8a
+CREATE VIEW Top_Revenue_by_Genre AS
+SELECT c.name, SUM(p.amount) AS "Revenue"
+FROM payment p
+JOIN rental r
+ON p.rental_id = r.rental_id
+JOIN inventory i
+ON r.inventory_id = i.inventory_id
+JOIN film_category fc
+ON i.film_id = fc.film_id
+JOIN category c
+ON fc.category_id = c.category_id
+GROUP BY c.name
+ORDER BY Revenue DESC LIMIT 5;
+
+-- 8b
+SELECT * FROM Top_Revenue_by_Genre;
+
+-- 8c
+DROP VIEW Top_Revenue_by_Genre;
